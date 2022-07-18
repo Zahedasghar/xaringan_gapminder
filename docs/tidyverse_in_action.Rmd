@@ -626,8 +626,136 @@ ggplot(gapminder) +
 ```
 
 
+---
+
+```{r}
+gapminder %>%  
+  select(-pop, -gdpPercap) %>%  
+  filter(year == 2007) %>%  
+  group_by(continent) %>%  
+  summarise(mean_life_exp =  
+              mean(lifeExp),median_life_exp=median(lifeExp)) 
+
+```
+---
 
 
+
+```{r}
+gapminder %>%  
+  select(-pop, -gdpPercap) %>%  
+  filter(year == 2007) %>%  
+  group_by(continent) %>%  
+  summarise(median_life_exp =  
+              median(lifeExp)) %>%  
+  ggplot() +  
+  aes(x = continent) +  
+  aes(y = median_life_exp) +  
+  geom_point(color = "blue", size = 3,  
+             alpha = .4) +  
+  scale_y_continuous(limits = c(0,85)) +  
+  labs(title = "Median life expectency by continent in 2007") +  
+  labs(subtitle = "Data Source: Gapminder package in R") +  
+  labs(x = "") +  
+  labs(y = "Median life expectancy") +  
+  labs(caption = "Zahid Asghar for 'QM4SSH'") +  
+  theme_minimal()
+```
+
+---
+.pull-left[
+```{r}
+gapminder %>%  
+  filter(year == 1997) %>%  
+  select(country, continent, lifeExp) %>%  
+  mutate(  
+    life_cats =  
+      case_when(lifeExp >= 70 ~ "70+",  
+                lifeExp < 70 ~ "<70")) %>%  
+  ggplot() +  
+  aes(x = continent, y = life_cats) +  
+  geom_jitter(width = .25, height = .25)+  
+  aes(col = continent) +  
+  scale_color_discrete(guide = FALSE) +  
+  theme_dark() +  
+  labs(x = "", y = "") +  
+  labs(title = "Life expectency beyond 70 in 1997")
+
+```
+
+
+
+---
+
+```{r}
+gapminder %>%  
+  mutate(gdp_billions =  
+           gdpPercap *  
+           pop/1000000000) %>%  
+  ggplot() +  
+  aes(x = year) +  
+  aes(y = gdp_billions) +  
+  geom_line() +  
+  aes(group = country) +  
+  scale_y_log10() +  
+  aes(col = continent) +  
+  facet_wrap( ~ continent) +  
+  scale_color_discrete(guide = F) +  
+  theme_minimal()
+```
+
+---
+
+```{r}
+gapminder %>%  
+  filter(year == 2007) %>%  
+  ggplot() +  
+  aes(x = continent, y = lifeExp) +  
+  geom_boxplot() +  
+  geom_jitter(height = 0, width = .2) +  
+  stat_summary(fun.y = mean,
+               geom = "point",
+               col = "goldenrod3",
+               size = 5)
+```
+
+---
+## Pakistan
+
+```{r}
+gapminder %>%  
+  filter(country == "Pakistan") %>%  
+  ggplot() +  
+  aes(x = year, y = lifeExp) +  
+  geom_point() +  
+  geom_line() +  
+  aes(alpha = year) +  
+  aes(col = year) +  
+  scale_color_viridis_c() +  
+  theme_classic()
+```
+
+
+
+
+---
+
+```{r}
+gapminder %>%  
+  filter(year == 2007) %>%  
+  ggplot() +  
+  aes(x = gdpPercap) +  
+  aes(y = lifeExp) +  
+  geom_point(alpha = .5) +  
+  geom_rug(size = 1) +  
+  aes(col = continent) +  
+  aes(col = lifeExp) +  
+  scale_x_log10() +  
+  aes(size = gdpPercap) +  
+  aes(size = pop) +  
+  geom_point(col = "darkgreen", size = 1) +  
+  facet_wrap(~ continent)
+```
 
 ---
 
