@@ -611,7 +611,7 @@ p1+labs(x = "GDP Per Capita", y = "Life Expectancy in Years",
 ```
 
 ---
-```{r roslings_plot_animation, eval=T, echo=F, comment = " "}
+```{r roslings_plot_animation, eval=F, echo=F, comment = " "}
 ggplot(gapminder) +
   aes(gdpPercap, lifeExp, size = pop, color = continent) +
   aes(group = country) +
