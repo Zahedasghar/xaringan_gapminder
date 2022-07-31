@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Analysis of tax services data using R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Zahid Asghar" />
+    <meta name="date" content="2022-07-24" />
+    <script src="Punjab_tax_files/header-attrs-2.14/header-attrs.js"></script>
+    <link href="Punjab_tax_files/xaringanExtra-banner-0.0.1/banner.css" rel="stylesheet" />
+    <script src="Punjab_tax_files/xaringanExtra-banner-0.0.1/banner.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Analysis of tax services data using R
+]
+.author[
+### Zahid Asghar
+]
+.date[
+### 24 July 2022
+]
+
+---
+
+
+
+
+
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 110px;
+height: 128px;
+z-index: 0;
+background-image: url(atomcamp.jpg);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+<script>document.addEventListener('DOMContentLoaded',function(){new xeBanner(JSON.parse('{"left":"","exclude":["title-slide"],"position":"top"}'))})</script>
+<script>document.addEventListener('DOMContentLoaded',function(){new xeBanner(JSON.parse('{"left":"Quant Methods for SS","right":"Prof.Dr. Zahid Asghar","exclude":["title-slide"],"position":"bottom"}'))})</script>
+
+---
+class: left inverse title-slide
+background-image: url(75_yr_pk.png)
+background-position:  50% 0%
+background-size:  10%
+##  Agenda : 5 Important verbs for handling data
+
+--
+
+####   View, glimpse, structure, head, tail
+
+--
+
+####  select() for column selection
+
+--
+
+####  filter() for data filtering
+
+--
+
+####  arrange() Data Ordering
+
+--
+
+####  mutate()  Creating Derived Columns
+
+--
+
+####  summarise()   Calculating Summary Statistics
+
+--
+
+####   group_by()
+
+---
+
+## Required libraries and data upload
+
+
+
+---
+# Overall Tax
+
+## Overall Tax Summary
+The `tax_summary` dataset provides a summary of the tax collected from around 178 services in Pakistani Rs. This data is for each fiscal year from 2012 to 2018. There are 1,033,223 observations with data on 28 variables.
+
+
+&lt;img src="Punjab_tax_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+
+---
+## Monthly data summary
+
+
+
+&lt;img src="Punjab_tax_files/figure-html/tax-monthly-1.png" width="100%" /&gt;
+
+
+---
+## Forecasting overall tax_output
+There are more than 170 services and if one needs to forecast , it is better to use some statistical forecasting methods in simple possible way. There are several methods but most commonly used methods are 
+- Naive Forecasting
+- Autoregressive Moving Average Models (ARIMA Models)
+- Exponential Smoothing Methods (ETS) and
+- Artificial Nueral Network (ANN)
+
+---
+## Annual Forecasting
+
+### NAIVE Forecasting
+
+
+```
+## 
+## Forecast method: Naive method
+## 
+## Model Information:
+## Call: forecast::naive(y = yearly_tax$tax_by_serv, h = 1) 
+## 
+## Residual sd: 17752696607.4666 
+## 
+## Error measures:
+##                       ME        RMSE         MAE      MPE     MAPE MASE
+## Training set 15740641248 17752696607 15740641248 18.75938 18.75938    1
+##                    ACF1
+## Training set -0.4398209
+## 
+## Forecasts:
+##    Point Forecast        Lo 80        Hi 80        Lo 95        Hi 95
+## 11   162226104227 139475108097 184977100357 127431458248 197020750206
+```
+
+
+---
+### ARIMA models
+
+
+```
+## Series: yearly_tax$tax_by_serv 
+## ARIMA(2,1,0) 
+## 
+## Coefficients:
+##          ar1     ar2
+##       0.1843  0.7445
+## s.e.  0.2214  0.2291
+## 
+## sigma^2 = 1.099e+20:  log likelihood = -220.47
+## AIC=446.95   AICc=451.75   BIC=447.54
+## 
+## Training set error measures:
+##                      ME       RMSE        MAE      MPE     MAPE      MASE
+## Training set 1537049565 8772688798 7741780560 1.574306 9.316564 0.4918339
+##                    ACF1
+## Training set -0.2534413
+```
+
+```
+##    Point Forecast        Lo 80        Hi 80        Lo 95        Hi 95
+## 11   173683229675 160245689090 187120770261 153132284793 194234174558
+```
+
+---
+
+### Aritificial Nueral Networks
+
+&lt;img src="Punjab_tax_files/figure-html/unnamed-chunk-6-1.png" width="100%" /&gt;
+
+```
+##    Point Forecast        Lo 80        Hi 80        Lo 95        Hi 95
+## 11   188179736185 180436564341 197250755625 175650438134 201913771447
+## 12   217592251047 206918591484 229985010594 198225612961 233562223141
+```
+
+```
+##                    ME       RMSE        MAE        MPE     MAPE      MASE
+## Training set -3245304 6992313801 6150710641 -0.4217402 5.947187 0.3907535
+##                    ACF1
+## Training set -0.6809473
+```
+
+---
+
+## Monthly forecasting for total tax over time
+As annual data are short and one may object that forecasting from such short data is not a good idea, though literature does not warn much on it if there is not huge variability in the data. In this case data quite smooth except one dip which was due to Supreme Court decision to make cellular taxes the same as in other services. As monthly data are available and more granularity always helps to get better insight, therefore, forecasting with three methods : seasonal naive, arima and ANN is given below.  
+
+---
+
+### Seasonal Naive Forecasting
+
+
+```
+##     Point Forecast    Lo 80    Hi 80     Lo 95    Hi 95
+## 115       15735.92 14660.59 16811.25 14091.347 17380.50
+## 116       15735.92 14215.18 17256.67 13410.142 18061.70
+## 117       15735.92 13873.40 17598.45 12887.434 18584.41
+## 118       15735.92 13585.26 17886.58 12446.771 19025.07
+## 119       15735.92 13331.41 18140.43 12058.540 19413.31
+## 120       15735.92 13101.91 18369.93 11707.551 19764.29
+## 121       15735.92 12890.87 18580.98 11384.784 20087.06
+## 122       15735.92 12694.43 18777.42 11084.360 20387.49
+## 123       15735.92 12509.93 18961.91 10802.195 20669.65
+## 124       15735.92 12335.43 19136.42 10535.318 20936.53
+## 125       15735.92 12169.46 19302.39 10281.482 21190.36
+## 126       15735.92 12010.87 19460.98 10038.945 21432.90
+## 127       15735.92 11858.76 19613.08  9806.320 21665.53
+## 128       15735.92 11712.41 19759.44  9582.484 21889.36
+## 129       15735.92 11571.19 19900.66  9366.508 22105.34
+## 130       15735.92 11434.60 20037.24  9157.620 22314.23
+## 131       15735.92 11302.22 20169.62  8955.163 22516.68
+## 132       15735.92 11173.68 20298.16  8758.579 22713.27
+## 133       15735.92 11048.67 20423.18  8567.383 22904.46
+## 134       15735.92 10926.90 20544.95  8381.156 23090.69
+## 135       15735.92 10808.14 20663.71  8199.530 23272.32
+## 136       15735.92 10692.18 20779.67  8022.179 23449.67
+## 137       15735.92 10578.82 20893.03  7848.814 23623.03
+## 138       15735.92 10467.90 21003.94  7679.180 23792.67
+```
+
+```
+## NULL
+```
+
+&lt;img src="Punjab_tax_files/figure-html/forecasting-1.png" width="100%" /&gt;
+
+---
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

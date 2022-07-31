@@ -342,8 +342,38 @@ gapminder %>%
 
 ```
 ---
-## if_else command alongwith mutate
 
+W## we could get the mean, maximum, and mean life expectancy of the entire dataset. 
+
+```{r}
+gapminder %>%
+  summarise(
+    lifeExp_min = min(lifeExp),
+    lifeExp_max = max(lifeExp),
+    lifeExp_mean = mean(lifeExp)
+  )
+```
+---
+For example, let’s say we want to get the mean, minimum, and maximum of life expectancy, but instead of for the entire dataset, we want to see it for each year. 
+
+```{r}
+gapminder %>%
+  group_by(year) %>%
+  summarise(
+    lifeExp_min = min(lifeExp),
+    lifeExp_max = max(lifeExp),
+    lifeExp_mean = mean(lifeExp)
+  )
+
+```
+
+---
+
+##[dplyr tutorial0](https://anderfernandez.com/en/blog/dplyr-tutorial/)
+
+
+---
+## if_else command alongwith mutate
 ```{r}
 gapminder %>%
   filter(year == 2007) %>%
@@ -352,6 +382,7 @@ gapminder %>%
   mutate(over75 = if_else(avgLifeExp > 70, "Y", "N"))
 
 ```
+
 ---
 ## Total Population by Continets in 2007
 
@@ -362,6 +393,7 @@ gapminder %>%
   summarize(tot_pop=sum(pop)) 
 
 ```
+
 ---
 ## Percentiles
 

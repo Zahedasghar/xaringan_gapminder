@@ -4,7 +4,7 @@
     <title>Gapminder data wrangling and visualisation using R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Zahid Asghar" />
-    <meta name="date" content="2022-07-18" />
+    <meta name="date" content="2022-07-22" />
     <script src="tidyverse_in_action_files/header-attrs-2.14/header-attrs.js"></script>
     <link href="tidyverse_in_action_files/xaringanExtra-banner-0.0.1/banner.css" rel="stylesheet" />
     <script src="tidyverse_in_action_files/xaringanExtra-banner-0.0.1/banner.js"></script>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### Zahid Asghar
 ]
 .date[
-### 18 July 2022
+### 22 July 2022
 ]
 
 ---
@@ -898,8 +898,64 @@ gapminder %&gt;%
 ## 5 Oceania      80.7
 ```
 ---
-## if_else command alongwith mutate
 
+W## we could get the mean, maximum, and mean life expectancy of the entire dataset. 
+
+
+```r
+gapminder %&gt;%
+  summarise(
+    lifeExp_min = min(lifeExp),
+    lifeExp_max = max(lifeExp),
+    lifeExp_mean = mean(lifeExp)
+  )
+```
+
+```
+## # A tibble: 1 × 3
+##   lifeExp_min lifeExp_max lifeExp_mean
+##         &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;
+## 1        23.6        82.6         59.5
+```
+---
+For example, let’s say we want to get the mean, minimum, and maximum of life expectancy, but instead of for the entire dataset, we want to see it for each year. 
+
+
+```r
+gapminder %&gt;%
+  group_by(year) %&gt;%
+  summarise(
+    lifeExp_min = min(lifeExp),
+    lifeExp_max = max(lifeExp),
+    lifeExp_mean = mean(lifeExp)
+  )
+```
+
+```
+## # A tibble: 12 × 4
+##     year lifeExp_min lifeExp_max lifeExp_mean
+##    &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;
+##  1  1952        28.8        72.7         49.1
+##  2  1957        30.3        73.5         51.5
+##  3  1962        32.0        73.7         53.6
+##  4  1967        34.0        74.2         55.7
+##  5  1972        35.4        74.7         57.6
+##  6  1977        31.2        76.1         59.6
+##  7  1982        38.4        77.1         61.5
+##  8  1987        39.9        78.7         63.2
+##  9  1992        23.6        79.4         64.2
+## 10  1997        36.1        80.7         65.0
+## 11  2002        39.2        82           65.7
+## 12  2007        39.6        82.6         67.0
+```
+
+---
+
+##[dplyr tutorial0](https://anderfernandez.com/en/blog/dplyr-tutorial/)
+
+
+---
+## if_else command alongwith mutate
 
 ```r
 gapminder %&gt;%
@@ -919,6 +975,7 @@ gapminder %&gt;%
 ## 4 Europe          77.6 Y     
 ## 5 Oceania         80.7 Y
 ```
+
 ---
 ## Total Population by Continets in 2007
 
@@ -940,6 +997,7 @@ gapminder %&gt;%
 ## 4 Europe     586098529
 ## 5 Oceania     24549947
 ```
+
 ---
 ## Percentiles
 
@@ -1082,7 +1140,7 @@ p1&lt;-ggplot(data=gapminder2007,mapping = aes(x=gdpPercap,y=lifeExp,color=conti
 p1+facet_wrap(~continent)
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-31-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-33-1.png" width="100%" /&gt;
 
 ```r
 p1+  labs(x = "GDP Per Capita", y = "Life Expectancy in Years",
@@ -1091,20 +1149,20 @@ p1+  labs(x = "GDP Per Capita", y = "Life Expectancy in Years",
        caption = "Source: Gapminder.")
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-31-2.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-33-2.png" width="100%" /&gt;
 
 ---
 ## Bubbleplot
 
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-32-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-1.png" width="100%" /&gt;
 
 ---
 If you just want to highlight the relationship between gbp per capita and life Expectancy you’ve probably done most of the work now. However, it is a good practice to highlight a few interesting dots in this chart to give more insight to the plot:
 
 
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-33-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-35-1.png" width="100%" /&gt;
 
 ---
 
@@ -1116,36 +1174,36 @@ P&lt;-ggplot(data=gapminder,mapping = aes(x=gdpPercap,y=lifeExp))
 P+geom_point()+geom_smooth()
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-1.png" width="100%" /&gt;
 
 ```r
 P+geom_point()+geom_smooth(method = "lm")
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-2.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-2.png" width="100%" /&gt;
 
 ```r
 P+geom_point()+geom_smooth(method = "gam")+scale_x_log10()
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-3.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-3.png" width="100%" /&gt;
 
 ```r
 P+geom_point()+geom_smooth(method = "gam")+scale_x_log10(labels=scales::dollar)
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-4.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-4.png" width="100%" /&gt;
 
 ```r
 P&lt;-ggplot(data=gapminder,mapping = aes(gdpPercap,y=lifeExp,color="purple"))
 P+geom_point()+geom_smooth(method = "loess")+scale_x_log10()
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-34-5.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-5.png" width="100%" /&gt;
 
 ---
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-35-1.png" width="100%" /&gt;&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-35-2.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-37-1.png" width="100%" /&gt;&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-37-2.png" width="100%" /&gt;
 
 ---
 
@@ -1162,18 +1220,18 @@ P+geom_point(alpha=0.3)+
        caption = "Source: Gapminder.")
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-36-1.png" width="100%" /&gt;
-
----
-
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-37-1.png" width="100%" /&gt;
-
----
 &lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-38-1.png" width="100%" /&gt;
 
 ---
 
 &lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-39-1.png" width="100%" /&gt;
+
+---
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-40-1.png" width="100%" /&gt;
+
+---
+
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-41-1.png" width="100%" /&gt;
 
 
 ```r
@@ -1181,12 +1239,12 @@ p + geom_point(mapping = aes(color = log(pop))) +
   scale_x_log10()  
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-40-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-42-1.png" width="100%" /&gt;
 ---
 
 ## Comparison of 2007 vs 1952 continentwise
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-41-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-43-1.png" width="100%" /&gt;
 
 ---
 
@@ -1198,7 +1256,7 @@ p1+labs(x = "GDP Per Capita", y = "Life Expectancy in Years",
        caption = "Source: Gapminder.")
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-42-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-44-1.png" width="100%" /&gt;
 
 ---
 
@@ -1252,7 +1310,7 @@ gapminder %&gt;%
   theme_minimal()
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-44-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-46-1.png" width="100%" /&gt;
 
 ---
 .pull-left[
@@ -1280,7 +1338,7 @@ gapminder %&gt;%
 ## use `guide = "none"` instead.
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-45-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-47-1.png" width="100%" /&gt;
 
 
 
@@ -1309,7 +1367,7 @@ gapminder %&gt;%
 ## use `guide = "none"` instead.
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-46-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-48-1.png" width="100%" /&gt;
 
 ---
 
@@ -1331,7 +1389,7 @@ gapminder %&gt;%
 ## Warning: `fun.y` is deprecated. Use `fun` instead.
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-47-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-49-1.png" width="100%" /&gt;
 
 ---
 ## Pakistan
@@ -1350,7 +1408,7 @@ gapminder %&gt;%
   theme_classic()
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-48-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-50-1.png" width="100%" /&gt;
 
 
 
@@ -1375,7 +1433,7 @@ gapminder %&gt;%
   facet_wrap(~ continent)
 ```
 
-&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-49-1.png" width="100%" /&gt;
+&lt;img src="tidyverse_in_action_files/figure-html/unnamed-chunk-51-1.png" width="100%" /&gt;
 
 ---
 
